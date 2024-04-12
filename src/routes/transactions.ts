@@ -5,6 +5,10 @@ import { z } from 'zod'
 import { checkSessionIdExists } from '../middlewares/check-session-id-exists'
 
 export async function transactionsRoutes(app: FastifyInstance) {
+  app.addHook('preHandler', async (req, res) => {
+    console.debug('transactionsRoutes')
+  })
+
   app.get('/', { preHandler: [checkSessionIdExists] }, async (req, res) => {
     const { sessionId } = req.cookies
 
@@ -73,7 +77,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
 
       reply.setCookie('sessionId', sessionId, {
         path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7, // 7 days
       })
     }
 
